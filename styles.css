@@ -1,0 +1,276 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #e0f7fa; /* Light cyan background */
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.navbar {
+    width: 100%;
+    background-color: #00796b; /* Teal background */
+    padding: 10px 0;
+    text-align: center;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar a {
+    color: #ffffff; /* White text */
+    padding: 14px 20px;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.navbar a:hover {
+    background-color: #ff5722; /* Vibrant orange background on hover */
+    color: white;
+    border-radius: 10px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-top: 60px; /* Adjust for fixed navbar */
+    flex-grow: 1;
+}
+
+.screen {
+    background-color: #00796b; /* Teal background */
+    color: white;
+    padding: 20px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.start-screen h1 {
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+.start-screen p {
+    margin-bottom: 20px;
+}
+
+.start-screen button {
+    background-color: #ff5722; /* Vibrant orange background */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.cards-screen h2,
+.transactions-screen h2,
+.screen h2 {
+    margin-bottom: 20px;
+}
+
+.cards {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.card {
+    background-color: #ffffff; /* White background */
+    color: #333;
+    border-radius: 15px;
+    padding: 20px;
+    width: 280px;
+    height: 160px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transform: perspective(1000px) rotateY(0deg) rotateX(0deg);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+}
+
+.card:hover {
+    transform: perspective(1000px) rotateY(5deg) rotateX(5deg);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.4);
+}
+
+.black-card {
+    background: linear-gradient(145deg, #5d4037, #3e2723); /* Brown gradient */
+    color: #fff;
+}
+
+.yellow-card {
+    background: linear-gradient(145deg, #ffeb3b, #fbc02d); /* Yellow gradient */
+    color: #333;
+}
+
+.card-type {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 50px;  /* Adjust this margin to prevent overlap with the chip */
+}
+
+.card-number {
+    font-size: 20px;
+    letter-spacing: 2px;
+}
+
+.card-expiry {
+    font-size: 16px;
+}
+
+.card-balance {
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.microchip {
+    position: absolute;
+    top: 20px; /* Move microchip to the top */
+    left: 20px;
+    width: 40px;
+}
+
+.mastercard-icon {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+}
+
+.expenses {
+    margin-top: 20px;
+}
+
+.transactions {
+    background-color: #ffffff; /* White background */
+    color: #333;
+    border-radius: 15px;
+    padding: 20px;
+}
+
+.transaction-card {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.transaction-details {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    background-color: #ff5722; /* Vibrant orange background */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.qr-code {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.qr-code img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 15px;
+}
+
+.add-balance {
+    margin-top: 20px;
+    background-color: #ffffff; /* White background */
+    color: #333;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+p {
+    color: white;
+}
+
+a {
+    color: #ff5722; /* Vibrant orange text */
+}
+
+.footer {
+    background-color: #00796b; /* Teal background */
+    color: white;
+    padding: 20px;
+    text-align: center;
+    width: 100%;
+    margin-top: auto; /* Push footer to the bottom */
+}
+
+.footer-section {
+    margin-bottom: 20px;
+}
+
+.social-icon {
+    width: 24px;
+    height: 24px;
+    margin: 0 10px;
+}
+
+/* Styles for chart container */
+.screen canvas {
+    max-width: 100%;
+    height: 400px; /* Adjust height as needed */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .navbar a {
+        display: block;
+        margin: 5px 0;
+    }
+
+    .card {
+        width: 100%;
+    }
+
+    .screen {
+        padding: 10px;
+    }
+}

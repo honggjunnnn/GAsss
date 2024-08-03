@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayNow Transfer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="navbar">
+        <a href="index.html">NexFund</a>
+        <a href="wallet.html">Wallet</a>
+        <a href="transactions.html">Transactions</a>
+        <a href="paynow.html">PayNow Transfer</a>
+        <a href="chart.html">Transaction Analysis</a>
+        <a href="anti-fraud.html">Anti-Fraud</a>
+        <a href="contact-us.html">Contact Us</a>
+    </div>
+    <div class="container">
+        <div class="screen">
+            <h2>PayNow Transfer</h2>
+            <form id="paynow-form">
+                <div class="form-group">
+                    <label for="card">Select Card:</label>
+                    <select id="card" name="card" required>
+                        <option value="•••• 6644">Mastercard •••• 6644</option>
+                        <option value="•••• 3201">Mastercard •••• 3201</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="recipient">Recipient:</label>
+                    <input type="text" id="recipient" name="recipient" required>
+                </div>
+                <div class="form-group">
+                    <label for="amount">Amount:</label>
+                    <input type="number" id="amount" name="amount" required>
+                </div>
+                <button type="submit">Transfer</button>
+            </form>
+        </div>
+    </div>
+    <div class="footer">
+        <div class="footer-section">
+            <h3>Contact Us</h3>
+            <p>Address: 123 Orchard Road, Singapore 238890</p>
+            <p>Phone: +65 6789 1234</p>
+            <p>
+                <a href="https://www.instagram.com" target="_blank">
+                    <img src="images/instagram.png" alt="Instagram" class="social-icon">
+                </a>
+                <a href="https://www.tiktok.com" target="_blank">
+                    <img src="images/tiktok.png" alt="TikTok" class="social-icon">
+                </a>
+            </p>
+        </div>
+        <div class="footer-section">
+            <h3>About Us</h3>
+            <p>We are a leading financial services provider, offering a wide range of products and services to meet your banking needs. Our commitment is to provide the best customer experience.</p>
+        </div>
+    </div>
+    <script src="auth.js"></script>
+    <script src="currency.js"></script>
+</body>
+</html>
