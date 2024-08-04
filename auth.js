@@ -77,8 +77,8 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = 'login.html';
     }
 
-    // Card balances stored in the script
-    const cardBalances = {
+    // Load card balances from localStorage or initialize if not present
+    let cardBalances = JSON.parse(localStorage.getItem('cardBalances')) || {
         '6644': 0.00,
         '3201': 0.00
     };
@@ -106,6 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (cardBalances[cardNumber] !== undefined) {
                 cardBalances[cardNumber] += amount;
+                localStorage.setItem('cardBalances', JSON.stringify(cardBalances)); // Save to localStorage
                 alert('Balance updated successfully!');
                 updateCardBalanceDisplay();
             } else {
@@ -134,6 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     // Update card balance
                     cardBalances[card] -= amount;
+                    localStorage.setItem('cardBalances', JSON.stringify(cardBalances)); // Save to localStorage
                     alert('Transfer successful!');
                     updateCardBalanceDisplay();
 
