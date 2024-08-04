@@ -79,8 +79,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Card balances stored in the script
     const cardBalances = {
-        '6644': 100000000000.00,
-        '3201': 1000000000000.00
+        '6644': 0.00,
+        '3201': 0.00
     };
 
     const updateCardBalanceDisplay = () => {
