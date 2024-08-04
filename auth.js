@@ -124,31 +124,35 @@ document.addEventListener('DOMContentLoaded', () => {
             const amount = parseFloat(document.getElementById('amount').value);
             const date = new Date().toLocaleDateString();
 
-            const transaction = { recipient, amount: amount.toFixed(2), date, card };
-
-            let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
-            transactions.push(transaction);
-            localStorage.setItem('transactions', JSON.stringify(transactions));
-
-            // Update card balance
             if (cardBalances[card] !== undefined) {
-                cardBalances[card] -= amount;
-                alert('Transfer successful!');
-                updateCardBalanceDisplay();
+                if (cardBalances[card] >= amount) {
+                    const transaction = { recipient, amount: amount.toFixed(2), date, card };
+
+                    let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+                    transactions.push(transaction);
+                    localStorage.setItem('transactions', JSON.stringify(transactions));
+
+                    // Update card balance
+                    cardBalances[card] -= amount;
+                    alert('Transfer successful!');
+                    updateCardBalanceDisplay();
+
+                    // Check for fraudulent transaction
+                    if (amount > 1000) {
+                        let flaggedTransactions = JSON.parse(localStorage.getItem('flaggedTransactions')) || [];
+                        flaggedTransactions.push(transaction);
+                        localStorage.setItem('flaggedTransactions', JSON.stringify(flaggedTransactions));
+                        alert('Potential fraud transaction detected! Transaction amount exceeds $1000.');
+                    }
+
+                    console.log('Transaction added:', transaction); // Debug log
+                    window.location.href = 'confirmation.html';
+                } else {
+                    alert('Insufficient balance!');
+                }
             } else {
                 alert('Card not found!');
             }
-
-            // Check for fraudulent transaction
-            if (amount > 1000) {
-                let flaggedTransactions = JSON.parse(localStorage.getItem('flaggedTransactions')) || [];
-                flaggedTransactions.push(transaction);
-                localStorage.setItem('flaggedTransactions', JSON.stringify(flaggedTransactions));
-                alert('Potential fraud transaction detected! Transaction amount exceeds $1000.');
-            }
-
-            console.log('Transaction added:', transaction); // Debug log
-            window.location.href = 'confirmation.html';
         });
     }
 
