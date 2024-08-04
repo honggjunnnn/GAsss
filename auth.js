@@ -84,12 +84,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Display card balances
     const cardElements = document.querySelectorAll('.card');
     if (cardElements.length > 0) {
-        const cardBalances = JSON.parse(localStorage.getItem('cardBalances'));
+        const cardBalances = JSON.parse(localStorage.getItem('cardBalances')) || {};
         cardElements.forEach(card => {
             const cardNumber = card.querySelector('.card-number').textContent;
             const balanceElement = card.querySelector('.card-balance');
             if (balanceElement) {
-                balanceElement.textContent = `Balance: SGD ${cardBalances[cardNumber].toFixed(2)}`;
+                balanceElement.textContent = `Balance: SGD ${cardBalances[cardNumber]?.toFixed(2) || 0.00}`;
             }
         });
     }
@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const cardNumber = document.getElementById('card-number').value;
             const amount = parseFloat(document.getElementById('amount').value);
 
-            let cardBalances = JSON.parse(localStorage.getItem('cardBalances'));
+            let cardBalances = JSON.parse(localStorage.getItem('cardBalances')) || {};
             if (cardBalances[cardNumber] !== undefined) {
                 cardBalances[cardNumber] += amount;
                 localStorage.setItem('cardBalances', JSON.stringify(cardBalances));
@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('transactions', JSON.stringify(transactions));
 
             // Update card balance
-            let cardBalances = JSON.parse(localStorage.getItem('cardBalances'));
+            let cardBalances = JSON.parse(localStorage.getItem('cardBalances')) || {};
             cardBalances[card] -= amount;  // Subtract from selected card
             localStorage.setItem('cardBalances', JSON.stringify(cardBalances));
 
@@ -276,4 +276,8 @@ function deleteTransaction(index, flagged = false) {
     } else {
         displayTransactions(transactions); // Refresh the transaction list
     }
+}
+
+function convertCurrency(baseCurrency) {
+    // Implementation for currency conversion
 }
