@@ -164,6 +164,12 @@ document.addEventListener('DOMContentLoaded', () => {
         displayTransactions(transactions);
     }
 
+    // Display flagged transactions on page load
+    if (currentPage === 'anti-fraud.html') {
+        const flaggedTransactions = JSON.parse(localStorage.getItem('flaggedTransactions')) || [];
+        displayFlaggedTransactions(flaggedTransactions);
+    }
+
     // Dummy functions for completeness
     function generateAndSend2FACode() {
         const code = Math.floor(100000 + Math.random() * 900000).toString(); // Generate a 6-digit code
@@ -238,13 +244,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function displayFlaggedTransactions() {
+    function displayFlaggedTransactions(flaggedTransactions) {
         const container = document.getElementById('flagged-transactions-container');
-        if (!container) return;
-
-        const flaggedTransactions = JSON.parse(localStorage.getItem('flaggedTransactions')) || [];
-        container.innerHTML = '<h2>Flagged Transactions</h2>';
+        if (!container) return; // If container doesn't exist, exit the function
+        container.innerHTML = '';
         flaggedTransactions.forEach((transaction, index) => {
+            console.log('Flagged Transaction:', transaction); // Log transaction data
+            const amount = parseFloat(transaction.amount); // Ensure the amount is parsed as a number
             const transactionElement = document.createElement('div');
             transactionElement.classList.add('transaction-card');
             transactionElement.innerHTML = `
@@ -282,7 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
         transactions.splice(index, 1);
         localStorage.setItem(flagged ? 'flaggedTransactions' : 'transactions', JSON.stringify(transactions));
         if (flagged) {
-            displayFlaggedTransactions(); // Refresh the flagged transaction list
+            displayFlaggedTransactions(transactions); // Refresh the flagged transaction list
         } else {
             displayTransactions(transactions); // Refresh the transaction list
         }
