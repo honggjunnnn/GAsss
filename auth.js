@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
+            console.log("Login attempt with username:", username); // Debug log
+
             const storedUsername = localStorage.getItem('username');
             const storedPassword = localStorage.getItem('password');
 
@@ -26,6 +28,8 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const inputCode = document.getElementById('2fa-code').value;
             const storedCode = sessionStorage.getItem('2faCode');
+
+            console.log("2FA code entered:", inputCode); // Debug log
 
             if (inputCode === storedCode) {
                 sessionStorage.setItem('loggedIn', true);
