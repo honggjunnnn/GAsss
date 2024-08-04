@@ -1,7 +1,86 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Handle Signup Form Submission
+    const signupForm = document.getElementById('signup-form');
+    if (signupForm) {
+        signupForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('new-username').value;
+            const password = document.getElementById('new-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+
+            // Simple validation
+            if (password !== confirmPassword) {
+                alert('Passwords do not match');
+                return;
+            }
+
+            // Store the new user's data in localStorage for demonstration purposes
+            localStorage.setItem('username', username);
+            localStorage.setItem('password', password);
+            localStorage.setItem('email', email);
+            localStorage.setItem('phone', phone);
+
+            alert('Sign up successful!');
+            window.location.href = 'login.html';
+        });
+    }
+
+    // Handle Login Form Submission
+    const loginForm = document.getElementById('login-form');
+    if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            console.log("Login attempt with username:", username); // Debug log
+
+            const storedUsername = localStorage.getItem('username');
+            const storedPassword = localStorage.getItem('password');
+
+            if (username === storedUsername && password === storedPassword) {
+                generateAndSend2FACode();
+                loginForm.style.display = 'none';
+                document.getElementById('2fa-form').style.display = 'block';
+            } else {
+                alert('Invalid username or password');
+            }
+        });
+    }
+
+    // Handle 2FA Form Submission
+    const twoFaForm = document.getElementById('2fa-form');
+    if (twoFaForm) {
+        twoFaForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const inputCode = document.getElementById('2fa-code').value;
+            const storedCode = sessionStorage.getItem('2faCode');
+
+            console.log("2FA code entered:", inputCode); // Debug log
+
+            if (inputCode === storedCode) {
+                sessionStorage.setItem('loggedIn', true);
+                alert('Login successful!');
+                window.location.href = 'index.html';
+            } else {
+                alert('Invalid 2FA code');
+            }
+        });
+    }
+
+    // Check login status
+    const protectedPages = ['index.html', 'wallet.html', 'transactions.html', 'paynow.html', 'chart.html', 'anti-fraud.html'];
+    const currentPage = window.location.pathname.split('/').pop();
+    if (protectedPages.includes(currentPage) && !sessionStorage.getItem('loggedIn')) {
+        window.location.href = 'login.html';
+    }
+
+    // Card balances stored in the script
     const cardBalances = {
-        '6644': 0.00,
-        '3201': 0.00
+        '6644': 100000000000.00,
+        '3201': 1000000000000.00
     };
 
     const updateCardBalanceDisplay = () => {
@@ -17,6 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     updateCardBalanceDisplay();
 
+    // Setup Add Balance Form
     const addBalanceForm = document.getElementById('add-balance-form');
     if (addBalanceForm) {
         addBalanceForm.addEventListener('submit', function(e) {
@@ -34,6 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Setup PayNow Form
     const paynowForm = document.getElementById('paynow-form');
     if (paynowForm) {
         paynowForm.addEventListener('submit', function(e) {
@@ -43,19 +124,35 @@ document.addEventListener('DOMContentLoaded', () => {
             const amount = parseFloat(document.getElementById('amount').value);
             const date = new Date().toLocaleDateString();
 
+            const transaction = { recipient, amount: amount.toFixed(2), date, card };
+
+            let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+            transactions.push(transaction);
+            localStorage.setItem('transactions', JSON.stringify(transactions));
+
+            // Update card balance
             if (cardBalances[card] !== undefined) {
                 cardBalances[card] -= amount;
-                const transaction = { recipient, amount: amount.toFixed(2), date, card };
                 alert('Transfer successful!');
                 updateCardBalanceDisplay();
-                console.log('Transaction added:', transaction); // Debug log
             } else {
                 alert('Card not found!');
             }
+
+            // Check for fraudulent transaction
+            if (amount > 1000) {
+                let flaggedTransactions = JSON.parse(localStorage.getItem('flaggedTransactions')) || [];
+                flaggedTransactions.push(transaction);
+                localStorage.setItem('flaggedTransactions', JSON.stringify(flaggedTransactions));
+                alert('Potential fraud transaction detected! Transaction amount exceeds $1000.');
+            }
+
+            console.log('Transaction added:', transaction); // Debug log
+            window.location.href = 'confirmation.html';
         });
     }
 
-    // Dummy functions for transactions and 2FA for completeness
+    // Dummy functions for completeness
     function generateAndSend2FACode() {
         const code = Math.floor(100000 + Math.random() * 900000).toString(); // Generate a 6-digit code
         sessionStorage.setItem('2faCode', code);
@@ -109,6 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
         displayTransactions(transactions); // Refresh the transaction list
     }
 
+    // Anti-Fraud Functions
     function checkForFraudulentTransactions() {
         const transactions = JSON.parse(localStorage.getItem('transactions')) || [];
         const flaggedTransactions = [];
@@ -180,48 +278,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function convertCurrency(baseCurrency) {
         // Implementation for currency conversion
-    }
-
-    function setupAddBalanceForm() {
-        const addBalanceForm = document.getElementById('add-balance-form');
-        if (addBalanceForm) {
-            addBalanceForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const cardNumber = document.getElementById('card-number').value;
-                const amount = parseFloat(document.getElementById('amount').value);
-
-                if (cardBalances[cardNumber] !== undefined) {
-                    cardBalances[cardNumber] += amount;
-                    alert('Balance updated successfully!');
-                    updateCardBalanceDisplay();
-                } else {
-                    alert('Card not found!');
-                }
-            });
-        }
-    }
-
-    function setupPayNowForm() {
-        const paynowForm = document.getElementById('paynow-form');
-        if (paynowForm) {
-            paynowForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const card = document.getElementById('card').value;
-                const recipient = document.getElementById('recipient').value;
-                const amount = parseFloat(document.getElementById('amount').value);
-                const date = new Date().toLocaleDateString();
-
-                if (cardBalances[card] !== undefined) {
-                    cardBalances[card] -= amount;
-                    const transaction = { recipient, amount: amount.toFixed(2), date, card };
-                    alert('Transfer successful!');
-                    updateCardBalanceDisplay();
-                    console.log('Transaction added:', transaction); // Debug log
-                } else {
-                    alert('Card not found!');
-                }
-            });
-        }
     }
 
     // Initialize forms
