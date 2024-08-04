@@ -1,4 +1,33 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Handle Signup Form Submission
+    const signupForm = document.getElementById('signup-form');
+    if (signupForm) {
+        signupForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('new-username').value;
+            const password = document.getElementById('new-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+
+            // Simple validation
+            if (password !== confirmPassword) {
+                alert('Passwords do not match');
+                return;
+            }
+
+            // Store the new user's data in localStorage for demonstration purposes
+            localStorage.setItem('username', username);
+            localStorage.setItem('password', password);
+            localStorage.setItem('email', email);
+            localStorage.setItem('phone', phone);
+
+            alert('Sign up successful!');
+            window.location.href = 'login.html';
+        });
+    }
+
+    // Handle Login Form Submission
     const loginForm = document.getElementById('login-form');
     if (loginForm) {
         loginForm.addEventListener('submit', function(e) {
@@ -21,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 2FA Form
+    // Handle 2FA Form Submission
     const twoFaForm = document.getElementById('2fa-form');
     if (twoFaForm) {
         twoFaForm.addEventListener('submit', function(e) {
