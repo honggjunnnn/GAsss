@@ -88,6 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
         cardElements.forEach(card => {
             const cardNumber = card.querySelector('.card-number').textContent.trim();
             const balanceElement = card.querySelector('.card-balance');
+            console.log("Displaying balance for card:", cardNumber, "with balance:", cardBalances[cardNumber]);
             if (balanceElement) {
                 balanceElement.textContent = `Balance: SGD ${cardBalances[cardNumber]?.toFixed(2) || 0.00}`;
             }
@@ -243,6 +244,9 @@ function setupAddBalanceForm() {
             const cleanCardNumber = cardNumber.replace(/\D/g, '');
 
             let cardBalances = JSON.parse(localStorage.getItem('cardBalances')) || {};
+            console.log("Card Number Submitted:", cleanCardNumber);
+            console.log("Current Card Balances:", cardBalances);
+
             if (cardBalances[`•••• ${cleanCardNumber}`] !== undefined) {
                 cardBalances[`•••• ${cleanCardNumber}`] += amount;
                 localStorage.setItem('cardBalances', JSON.stringify(cardBalances));
