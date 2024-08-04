@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const transactions = JSON.parse(localStorage.getItem('transactions')) || [];
     displayTransactions(transactions);
 
-    // Display card balances
+    // Display card balances on page load
     const cardElements = document.querySelectorAll('.card');
     if (cardElements.length > 0) {
         const cardBalances = JSON.parse(localStorage.getItem('cardBalances')) || {};
@@ -97,68 +97,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // Check for fraudulent transactions
     checkForFraudulentTransactions();
 
-    // Add balance form
-    const addBalanceForm = document.getElementById('add-balance-form');
-    if (addBalanceForm) {
-        addBalanceForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const cardNumber = document.getElementById('card-number').value;
-            const amount = parseFloat(document.getElementById('amount').value);
+    // Setup Add Balance Form
+    setupAddBalanceForm();
 
-            let cardBalances = JSON.parse(localStorage.getItem('cardBalances')) || {};
-            if (cardBalances[cardNumber] !== undefined) {
-                cardBalances[cardNumber] += amount;
-                localStorage.setItem('cardBalances', JSON.stringify(cardBalances));
-                alert('Balance updated successfully!');
-                location.reload(); // Reload the page to update the displayed balances
-            } else {
-                alert('Card not found!');
-            }
-        });
-    }
-
-    // PayNow Form
-    const paynowForm = document.getElementById('paynow-form');
-    if (paynowForm) {
-        paynowForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const card = document.getElementById('card').value;
-            const recipient = document.getElementById('recipient').value;
-            const amount = parseFloat(document.getElementById('amount').value);
-            const date = new Date().toLocaleDateString();
-
-            const transaction = { recipient, amount: amount.toFixed(2), date, card };
-
-            let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
-            transactions.push(transaction);
-            localStorage.setItem('transactions', JSON.stringify(transactions));
-
-            // Update card balance
-            let cardBalances = JSON.parse(localStorage.getItem('cardBalances')) || {};
-            cardBalances[card] -= amount;  // Subtract from selected card
-            localStorage.setItem('cardBalances', JSON.stringify(cardBalances));
-
-            // Check for fraudulent transaction
-            if (amount > 1000) {
-                let flaggedTransactions = JSON.parse(localStorage.getItem('flaggedTransactions')) || [];
-                flaggedTransactions.push(transaction);
-                localStorage.setItem('flaggedTransactions', JSON.stringify(flaggedTransactions));
-                alert('Potential fraud transaction detected! Transaction amount exceeds $1000.');
-            }
-
-            console.log('Transaction added:', transaction); // Debug log
-            alert('Transfer successful!');
-            window.location.href = 'confirmation.html';
-        });
-    }
+    // Setup PayNow Form
+    setupPayNowForm();
 });
 
 function generateAndSend2FACode() {
     const code = Math.floor(100000 + Math.random() * 900000).toString(); // Generate a 6-digit code
     sessionStorage.setItem('2faCode', code);
-    const email = localStorage.getItem('email');
     alert(`Your 2FA code is: ${code}`); // For testing purposes; replace with email sending logic in production
-    // Implement email sending logic here
 }
 
 function displayTransactions(transactions) {
@@ -280,4 +229,61 @@ function deleteTransaction(index, flagged = false) {
 
 function convertCurrency(baseCurrency) {
     // Implementation for currency conversion
+}
+
+function setupAddBalanceForm() {
+    const addBalanceForm = document.getElementById('add-balance-form');
+    if (addBalanceForm) {
+        addBalanceForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const cardNumber = document.getElementById('card-number').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+
+            let cardBalances = JSON.parse(localStorage.getItem('cardBalances')) || {};
+            if (cardBalances[cardNumber] !== undefined) {
+                cardBalances[cardNumber] += amount;
+                localStorage.setItem('cardBalances', JSON.stringify(cardBalances));
+                alert('Balance updated successfully!');
+                location.reload(); // Reload the page to update the displayed balances
+            } else {
+                alert('Card not found!');
+            }
+        });
+    }
+}
+
+function setupPayNowForm() {
+    const paynowForm = document.getElementById('paynow-form');
+    if (paynowForm) {
+        paynowForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const card = document.getElementById('card').value;
+            const recipient = document.getElementById('recipient').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+            const date = new Date().toLocaleDateString();
+
+            const transaction = { recipient, amount: amount.toFixed(2), date, card };
+
+            let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+            transactions.push(transaction);
+            localStorage.setItem('transactions', JSON.stringify(transactions));
+
+            // Update card balance
+            let cardBalances = JSON.parse(localStorage.getItem('cardBalances')) || {};
+            cardBalances[card] -= amount;  // Subtract from selected card
+            localStorage.setItem('cardBalances', JSON.stringify(cardBalances));
+
+            // Check for fraudulent transaction
+            if (amount > 1000) {
+                let flaggedTransactions = JSON.parse(localStorage.getItem('flaggedTransactions')) || [];
+                flaggedTransactions.push(transaction);
+                localStorage.setItem('flaggedTransactions', JSON.stringify(flaggedTransactions));
+                alert('Potential fraud transaction detected! Transaction amount exceeds $1000.');
+            }
+
+            console.log('Transaction added:', transaction); // Debug log
+            alert('Transfer successful!');
+            window.location.href = 'confirmation.html';
+        });
+    }
 }
