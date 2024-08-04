@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (cardElements.length > 0) {
         const cardBalances = JSON.parse(localStorage.getItem('cardBalances')) || {};
         cardElements.forEach(card => {
-            const cardNumber = card.querySelector('.card-number').textContent;
+            const cardNumber = card.querySelector('.card-number').textContent.trim();
             const balanceElement = card.querySelector('.card-balance');
             if (balanceElement) {
                 balanceElement.textContent = `Balance: SGD ${cardBalances[cardNumber]?.toFixed(2) || 0.00}`;
@@ -239,9 +239,12 @@ function setupAddBalanceForm() {
             const cardNumber = document.getElementById('card-number').value;
             const amount = parseFloat(document.getElementById('amount').value);
 
+            // Clean card number by removing non-digit characters
+            const cleanCardNumber = cardNumber.replace(/\D/g, '');
+
             let cardBalances = JSON.parse(localStorage.getItem('cardBalances')) || {};
-            if (cardBalances[cardNumber] !== undefined) {
-                cardBalances[cardNumber] += amount;
+            if (cardBalances[`•••• ${cleanCardNumber}`] !== undefined) {
+                cardBalances[`•••• ${cleanCardNumber}`] += amount;
                 localStorage.setItem('cardBalances', JSON.stringify(cardBalances));
                 alert('Balance updated successfully!');
                 location.reload(); // Reload the page to update the displayed balances
