@@ -156,6 +156,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Display transactions on page load
+    if (currentPage === 'transactions.html') {
+        const transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+        displayTransactions(transactions);
+    }
+
     // Dummy functions for completeness
     function generateAndSend2FACode() {
         const code = Math.floor(100000 + Math.random() * 900000).toString(); // Generate a 6-digit code
